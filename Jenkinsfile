@@ -17,5 +17,12 @@ pipeline {
         build job: 'deploy-to-staging'
       }
     }
+    stage('Deploy to production server') {
+      steps {
+        timeout(time: 5, unit: 'DAYS')
+        input message: 'Approve deployment to production?'
+        build job: 'deploy-to-production'
+      }
+    }
   }
 }
