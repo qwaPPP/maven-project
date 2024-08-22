@@ -7,9 +7,13 @@ pipeline {
       }
       post {
         success {
+          echo 'Archiving'
           archiveArtifacts artifacts: '**/*.war'
         }
       }
+    }
+    stage('Deploy to stage server') {
+      build job: 'deploy-to-staging'
     }
   }
 }
