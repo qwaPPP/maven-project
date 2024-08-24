@@ -23,9 +23,11 @@ pipeline {
           }
       }
         stage('Deploy to production server') {
-          sh 'cp **/*.war /srv/tomcat-production/webapps'
+          steps {
+            sh 'cp **/*.war /srv/tomcat-production/webapps'
+          }
         }
+      }
     }
   }
-}
 }
