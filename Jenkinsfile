@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  triggers {
+    pollSCM('*/2 * * * *')
+  }
   stages {
     stage('Build war file') {
       steps {
@@ -12,18 +15,16 @@ pipeline {
         }
       }
     }
-    stage('Deploy to stage server') {
-      steps {
-        build job: 'deploy-to-staging'
+    stage('Deploy') {
+      parallel {
+        stage('Deploy to stage server') {
+          steps {
+            sh 'cp **/*.war /srv/tomcat-staging/webapps
+          }
       }
-    }
-    stage('Deploy to production server') {
-      steps {
-        timeout(time: 5, unit: 'DAYS') {
-          input message: 'Approve deployment to production?'
+        stage('Deploy to production server') {
+          sh 'cp **/*.war /srv/tomcat-production/webapps
         }
-        build job: 'deploy-to-production'
-      }
     }
   }
 }
